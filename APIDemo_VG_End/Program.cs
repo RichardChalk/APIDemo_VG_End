@@ -106,7 +106,17 @@ namespace DeleteMe
                     .AllowAnyHeader();
             }));
 
+            // Lägg till min DataInitializer med Dependency Injection
+            builder.Services.AddTransient<DataInitializer>();
+
             var app = builder.Build();
+
+            // Kör min MigrateData() metod
+            using (var scope = app.Services.CreateScope())
+            {
+                scope.ServiceProvider.GetService<DataInitializer>().MigrateData();
+            }
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
